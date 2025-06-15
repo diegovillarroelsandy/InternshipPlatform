@@ -1,7 +1,36 @@
-import React from "react";
-import { AppBar, Toolbar, Button, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  Typography,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import { getUser, isAdmin, logout } from "../utils/auth";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import { useState } from "react";
+
 export default function Navbar() {
+  const user = getUser();
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleClose();
+    navigate("/login");
+  };
+
   return (
     <AppBar position="static">
       <Toolbar>
@@ -10,6 +39,7 @@ export default function Navbar() {
             Landing
           </Button>
         </Typography>
+
         <Button color="inherit" component={Link} to="/">
           Home
         </Button>
@@ -19,9 +49,42 @@ export default function Navbar() {
         <Button color="inherit" component={Link} to="/info">
           Más Información
         </Button>
-        <Button color="inherit" component={Link} to="/login" variant="outlined">
-          Iniciar Sesión
-        </Button>
+
+        {user && isAdmin(user) && (
+          <Button color="inherit" component={Link} to="/dashboard">
+            Dashboard
+          </Button>
+        )}
+
+        {user ? (
+          <>
+            <IconButton
+              color="inherit"
+              onClick={handleMenu}
+              size="large"
+              edge="end"
+            >
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem disabled>{user.usuario}</MenuItem>
+              <MenuItem onClick={handleLogout}>Cerrar sesión</MenuItem>
+            </Menu>
+          </>
+        ) : (
+          <Button
+            color="inherit"
+            component={Link}
+            to="/login"
+            variant="outlined"
+          >
+            Iniciar Sesión
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );
