@@ -2,6 +2,24 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Available Commands
+
+En el directorio del proyecto, puedes ejecutar:
+
+### `docker-compose up --build`
+
+Construye e inicia todos los servicios definidos en el archivo docker-compose.yml.
+La opción `--build` asegura que las imágenes de Docker se reconstruyan utilizando el código y la configuración más recientes.
+Es útil cuando se han realizado cambios en el código fuente o en archivos relacionados con Docker.
+
+### `npm run dev`
+
+Ejecuta la aplicación en modo desarrollo.
+Este comando normalmente utiliza herramientas como `nodemon`, `vite` o `next` para habilitar la recarga automática cuando se detectan cambios en el código.
+Abre [http://localhost:3000](http://localhost:3000) (o el puerto especificado) para verla en tu navegador.
+
+La página se recargará automáticamente si realizas ediciones.
+
 ## Available Scripts
 
 In the project directory, you can run:
