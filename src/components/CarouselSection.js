@@ -8,22 +8,22 @@ const propuestas = [
   {
     title: "Propuesta 1",
     description: "Descripción corta",
-    img: "https://source.unsplash.com/random/1",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmt9HWeKsVUssKxA2aRFq3tb1VFtNMxenpdg&s",
   },
   {
     title: "Propuesta 2",
     description: "Otra idea útil",
-    img: "https://source.unsplash.com/random/2",
+    img: "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/72B2/production/_112826392_gettyimages-480952865.jpg.webp",
   },
   {
     title: "Propuesta 3",
     description: "Algo interesante",
-    img: "https://source.unsplash.com/random/3",
+    img: "https://i.blogs.es/a2066e/programando/1366_2000.jpg",
   },
   {
     title: "Propuesta 4",
     description: "Contenido útil",
-    img: "https://source.unsplash.com/random/4",
+    img: "https://www.aprendemas.com/mx/blog/images/2023/01/aprender_programacion.jpg",
   },
 ];
 
@@ -49,7 +49,7 @@ export default function CarouselSection() {
             <Card>
               <CardMedia
                 component="img"
-                height="180"
+                height="240"
                 image={item.img}
                 alt={item.title}
               />
