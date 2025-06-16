@@ -1,0 +1,15 @@
+# Dockerfile.backend
+
+FROM node:18
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN ls -la
+RUN npm install
+
+COPY src/ ./src/
+
+EXPOSE 5000
+
+CMD ["npm", "run", "server"]
