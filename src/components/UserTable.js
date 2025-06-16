@@ -97,6 +97,7 @@ const UserTable = () => {
     try {
       await axiosInstance.delete(`/users/${id}`);
       setUsers(users.filter((u) => u._id !== id));
+      showSnackbar("Usuario eliminado exitosamente", "success");
     } catch (error) {
       console.error(error);
       showSnackbar("Error eliminando usuario");
