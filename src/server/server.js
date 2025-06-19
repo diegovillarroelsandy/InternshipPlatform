@@ -29,8 +29,6 @@ const createDefaultAdmin = async () => {
       console.log(
         "Administrador por defecto creado: admin@admin.com / admin123"
       );
-    } else {
-      console.log("Ya existe un administrador");
     }
   } catch (error) {
     console.error("Error al crear el admin por defecto:", error.message);
