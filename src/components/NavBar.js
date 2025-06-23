@@ -15,7 +15,7 @@ import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 
 export default function Navbar() {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -30,6 +30,7 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
     handleClose();
+    setUser(null);
     navigate("/login");
   };
 
