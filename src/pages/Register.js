@@ -32,25 +32,42 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const validate = () => {
-    const newErrors = {};
-    if (usuario.length > 8) newErrors.usuario = "Máximo 8 caracteres";
-    if (!/\S+@\S+\.\S+/.test(correo)) newErrors.correo = "Correo inválido";
-    if (!password) newErrors.password = "Contraseña requerida";
-    setErrors(newErrors);
+const validate = () => {
+  const newErrors = {};
 
-    if (Object.keys(newErrors).length > 0) {
-      setSnackbar({
-        open: true,
-        message: "Completa correctamente los campos",
-        severity: "error",
-        showLoginButton: false,
-      });
-      return false;
-    }
+  // Usuario: máximo 8 caracteres, solo letras y números
+  if (usuario.length > 8) {
+    newErrors.usuario = "Máximo 8 caracteres";
+  } else if (!/^[a-zA-Z0-9]+$/.test(usuario)) {
+    newErrors.usuario = "Solo letras y números (sin caracteres especiales)";
+  }
 
-    return true;
-  };
+  // Correo: formato válido
+  if (!/\S+@\S+\.\S+/.test(correo)) {
+    newErrors.correo = "Correo inválido";
+  }
+
+  // Contraseña: requerida y máximo 20 caracteres
+  if (!password) {
+    newErrors.password = "Contraseña requerida";
+  } else if (password.length > 20) {
+    newErrors.password = "Máximo 20 caracteres";
+  }
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0) {
+    setSnackbar({
+      open: true,
+      message: "Completa correctamente los campos",
+      severity: "error",
+      showLoginButton: false,
+    });
+    return false;
+  }
+
+  return true;
+};
 
   const handleRegister = async () => {
     if (!validate()) return;

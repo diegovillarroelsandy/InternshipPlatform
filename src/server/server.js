@@ -15,6 +15,10 @@ app.use("/api/auth", require("./routes/authRoutes"));
 const User = require("./models/User");
 const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes);
+
+app.use("/api/propuestas", require("./routes/propuestasRoutes"));
+
+
 const createDefaultAdmin = async () => {
   try {
     const existingAdmin = await User.findOne({ rol: "admin" });
