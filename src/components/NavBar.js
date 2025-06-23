@@ -8,12 +8,14 @@ import {
   IconButton,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { getUser, isAdmin, logout } from "../utils/auth";
+import { isAdmin, logout } from "../utils/auth";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useState } from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function Navbar() {
-  const user = getUser();
+  const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -28,6 +30,7 @@ export default function Navbar() {
   const handleLogout = () => {
     logout();
     handleClose();
+    setUser(null);
     navigate("/login");
   };
 
@@ -54,6 +57,14 @@ export default function Navbar() {
           <Button color="inherit" component={Link} to="/dashboard">
             Dashboard
           </Button>
+        )}
+        {user?.rol === "organizacion" && (
+        <>
+          
+          <Button component={Link} to="/mis-postulaciones" color="inherit">
+            Ver Postulaciones
+          </Button>
+        </>
         )}
 
         {user ? (

@@ -7,9 +7,9 @@ import Info from "./pages/Info";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
-
+import VerPostulaciones from "./pages/VerPostulaciones";
 import ProtectedRoute from "./utils/protectedRoutes";
-
+import OrganizacionRoute from "./utils/organizacionRoutes";
 function App() {
   return (
     <>
@@ -20,7 +20,13 @@ function App() {
         <Route path="/info" element={<Info />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
+        <Route path="*" element={<h1>Página no encontrada</h1>} />
+        
+        <Route path="/mis-postulaciones" element={
+          <OrganizacionRoute>
+            <VerPostulaciones />
+          </OrganizacionRoute>}
+        />
         <Route
           path="/dashboard"
           element={

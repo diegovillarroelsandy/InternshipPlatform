@@ -1,27 +1,98 @@
-// src/pages/Register.js
 import React, { useState } from "react";
-import { Container, Typography, TextField, Button } from "@mui/material";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl,
+  Snackbar,
+  Alert,
+  AlertTitle,
+  Stack,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axiosInstance from "../utils/axiosInstance";
 
 export default function Register() {
   const [usuario, setUsuario] = useState("");
   const [correo, setCorreo] = useState("");
-  const [contrasena, setContrasena] = useState("");
+  const [password, setPassword] = useState("");
   const [rol, setRol] = useState("estudiante");
+  const [errors, setErrors] = useState({});
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success",
+    showLoginButton: false,
+  });
+
   const navigate = useNavigate();
 
+const validate = () => {
+  const newErrors = {};
+
+  // Usuario: máximo 8 caracteres, solo letras y números
+  if (usuario.length > 8) {
+    newErrors.usuario = "Máximo 8 caracteres";
+  } else if (!/^[a-zA-Z0-9]+$/.test(usuario)) {
+    newErrors.usuario = "Solo letras y números (sin caracteres especiales)";
+  }
+
+  // Correo: formato válido
+  if (!/\S+@\S+\.\S+/.test(correo)) {
+    newErrors.correo = "Correo inválido";
+  }
+
+  // Contraseña: requerida y máximo 20 caracteres
+  if (!password) {
+    newErrors.password = "Contraseña requerida";
+  } else if (password.length > 20) {
+    newErrors.password = "Máximo 20 caracteres";
+  }
+
+  setErrors(newErrors);
+
+  if (Object.keys(newErrors).length > 0) {
+    setSnackbar({
+      open: true,
+      message: "Completa correctamente los campos",
+      severity: "error",
+      showLoginButton: false,
+    });
+    return false;
+  }
+
+  return true;
+};
+
   const handleRegister = async () => {
+    if (!validate()) return;
+
     try {
-      await axios.post("/api/users", {
+      await axiosInstance.post("/auth/register", {
         usuario,
         correo,
-        contrasena,
+        password,
         rol,
       });
-      navigate("/login");
+
+      setSnackbar({
+        open: true,
+        message: "Registro exitoso",
+        severity: "success",
+        showLoginButton: true,
+      });
     } catch (error) {
-      console.error("Error al registrar:", error);
+      setSnackbar({
+        open: true,
+        message: error?.response?.data?.message || "Error al registrar",
+        severity: "error",
+        showLoginButton: false,
+      });
     }
   };
 
@@ -36,6 +107,8 @@ export default function Register() {
         margin="normal"
         value={usuario}
         onChange={(e) => setUsuario(e.target.value)}
+        error={!!errors.usuario}
+        helperText={errors.usuario}
       />
       <TextField
         fullWidth
@@ -43,15 +116,32 @@ export default function Register() {
         margin="normal"
         value={correo}
         onChange={(e) => setCorreo(e.target.value)}
+        error={!!errors.correo}
+        helperText={errors.correo}
       />
       <TextField
         fullWidth
         label="Contraseña"
         type="password"
         margin="normal"
-        value={contrasena}
-        onChange={(e) => setContrasena(e.target.value)}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        error={!!errors.password}
+        helperText={errors.password}
       />
+
+      <FormControl fullWidth margin="normal">
+        <InputLabel>Rol</InputLabel>
+        <Select
+          value={rol}
+          label="Rol"
+          onChange={(e) => setRol(e.target.value)}
+        >
+          <MenuItem value="estudiante">Estudiante</MenuItem>
+          <MenuItem value="organizacion">Organización</MenuItem>
+        </Select>
+      </FormControl>
+
       <Button
         variant="contained"
         color="primary"
@@ -61,6 +151,36 @@ export default function Register() {
       >
         Crear Cuenta
       </Button>
+
+      <Snackbar
+        open={snackbar.open}
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity={snackbar.severity}
+          onClose={() => setSnackbar({ ...snackbar, open: false })}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          <Stack spacing={1}>
+            <AlertTitle>
+              {snackbar.severity === "success" ? "Éxito" : "Error"}
+            </AlertTitle>
+            {snackbar.message}
+            {snackbar.showLoginButton && (
+              <Button
+                variant="outlined"
+                color="inherit"
+                size="small"
+                onClick={() => navigate("/login")}
+              >
+                Ir al login
+              </Button>
+            )}
+          </Stack>
+        </Alert>
+      </Snackbar>
     </Container>
   );
 }

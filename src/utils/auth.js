@@ -21,6 +21,7 @@ export function logout() {
   localStorage.removeItem("user");
 }
 export const setUser = (user) => {
+  console.log("Seteo de usuario", user);
   localStorage.setItem("user", JSON.stringify(user));
 };
 export const setToken = (token) => {

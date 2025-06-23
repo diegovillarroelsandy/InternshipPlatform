@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 import { setUser } from "../utils/auth";
+import { UserContext } from "../context/UserContext";
+import React, { useContext } from "react";
 export default function Login() {
   const [correo, setCorreo] = useState("");
   const [contrasena, setContrasena] = useState("");
   const navigate = useNavigate();
-
+  const { setUser: setUserContext } = useContext(UserContext);
   const handleLogin = async () => {
     try {
       const res = await axiosInstance.post("/auth/login", {
@@ -15,6 +17,7 @@ export default function Login() {
         contrasena,
       });
       setUser({ ...res.data.user, token: res.data.token });
+      setUserContext(res.data.user);
       navigate("/");
     } catch (error) {
       console.error("Error al iniciar sesión:", error);

@@ -15,6 +15,10 @@ app.use("/api/auth", require("./routes/authRoutes"));
 const User = require("./models/User");
 const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes);
+
+app.use("/api/propuestas", require("./routes/propuestasRoutes"));
+
+
 const createDefaultAdmin = async () => {
   try {
     const existingAdmin = await User.findOne({ rol: "admin" });
@@ -29,8 +33,6 @@ const createDefaultAdmin = async () => {
       console.log(
         "Administrador por defecto creado: admin@admin.com / admin123"
       );
-    } else {
-      console.log("Ya existe un administrador");
     }
   } catch (error) {
     console.error("Error al crear el admin por defecto:", error.message);

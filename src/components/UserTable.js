@@ -81,7 +81,6 @@ const UserTable = () => {
   const handleCreate = async () => {
     if (!validateForm()) return;
 
-    console.log("Enviando datos:", form);
     try {
       const res = await axiosInstance.post("/users", form);
       showSnackbar(res.data.message);

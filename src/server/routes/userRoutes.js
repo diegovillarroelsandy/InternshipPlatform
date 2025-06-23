@@ -20,7 +20,7 @@ router.delete("/:id", auth, isAdmin, async (req, res) => {
   res.json({ message: "Usuario eliminado" });
 });
 
-router.post("/", auth, isAdmin, async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     console.log("Request body:", req.body);
     if (req.user.rol !== "admin") {
