@@ -17,7 +17,8 @@ const userRoutes = require("./routes/userRoutes");
 app.use("/api/users", userRoutes);
 
 app.use("/api/propuestas", require("./routes/propuestasRoutes"));
-
+const postulacionRoutes = require("./routes/postulaciones");
+app.use("/api/postulaciones", postulacionRoutes);
 
 const createDefaultAdmin = async () => {
   try {
