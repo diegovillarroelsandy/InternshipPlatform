@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/NavBar";
 import Home from "./pages/Home";
@@ -7,9 +6,9 @@ import Info from "./pages/Info";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
-import VerPostulaciones from "./pages/VerPostulaciones";
+import MisPostulaciones from "./pages/MisPostulaciones";
 import ProtectedRoute from "./utils/protectedRoutes";
-import OrganizacionRoute from "./utils/organizacionRoutes";
+import PostulacionesOrganizacion from "./pages/PostulacionesOrganizacion";
 function App() {
   return (
     <>
@@ -23,9 +22,8 @@ function App() {
         <Route path="*" element={<h1>Página no encontrada</h1>} />
         
         <Route path="/mis-postulaciones" element={
-          <OrganizacionRoute>
-            <VerPostulaciones />
-          </OrganizacionRoute>}
+            <MisPostulaciones />
+          }
         />
         <Route
           path="/dashboard"
@@ -35,6 +33,12 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+  path="/postulaciones-organizacion"
+  element={
+      <PostulacionesOrganizacion />
+  }
+/>
       </Routes>
     </>
   );
