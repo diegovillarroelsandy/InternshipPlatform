@@ -58,13 +58,19 @@ export default function Navbar() {
             Dashboard
           </Button>
         )}
+        
         {user?.rol === "organizacion" && (
         <>
           
-          <Button component={Link} to="/mis-postulaciones" color="inherit">
+          <Button component={Link} to="/postulaciones-organizacion" color="inherit">
             Ver Postulaciones
           </Button>
         </>
+        )}
+        {user?.rol === "estudiante" && (
+        <Button component={Link} to="/mis-postulaciones" color="inherit">
+          Mis Postulaciones
+        </Button>
         )}
 
         {user ? (

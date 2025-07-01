@@ -30,11 +30,20 @@ exports.crearPostulacion = async (req, res) => {
 exports.getPostulacionesEstudiante = async (req, res) => {
   try {
     const postulaciones = await Postulacion.find({ estudiante: req.user.id })
-      .populate("propuesta")
-      .populate("estudiante", "usuario correo");
+      .populate({
+        path: "propuesta",
+        populate: {
+          path: "organizacion",
+          model: "User", // debe coincidir con el modelo
+          select: "usuario correo", // campos que quieras mostrar
+        },
+      })
+      .sort({ fecha: -1 });
+
     res.json(postulaciones);
   } catch (error) {
-    res.status(500).json({ message: "Error obteniendo postulaciones", error });
+    console.error(error);
+    res.status(500).json({ message: "Error al obtener tus postulaciones" });
   }
 };
 
@@ -65,5 +74,44 @@ exports.getPostulacionesOrganizacion = async (req, res) => {
     res.json(postulaciones);
   } catch (error) {
     res.status(500).json({ message: "Error obteniendo postulaciones", error });
+  }
+};
+
+exports.deletePostulacion = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const postulacion = await Postulacion.findByIdAndDelete(id);
+    if (!postulacion) {
+      return res.status(404).json({ message: "Postulación no encontrada" });
+    }
+
+    res.json({ message: "Postulación eliminada correctamente" });
+  } catch (error) {
+    res.status(500).json({ message: "Error eliminando postulación", error });
+  }
+};
+exports.updatePostulacion = async (req, res) => {
+  try {
+    const { presentacion } = req.body;
+    const postulacionId = req.params.id;
+
+    const updatedPostulacion = await Postulacion.findByIdAndUpdate(
+      postulacionId,
+      { presentacion },
+      { new: true }
+    );
+
+    if (!updatedPostulacion) {
+      return res.status(404).json({ message: "Postulación no encontrada" });
+    }
+
+    res.json({
+      message: "Postulación actualizada correctamente",
+      postulacion: updatedPostulacion,
+    });
+  } catch (error) {
+    console.error("Error actualizando postulación:", error);
+    res.status(500).json({ message: "Error en el servidor", error });
   }
 };
