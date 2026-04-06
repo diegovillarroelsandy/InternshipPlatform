@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Card,
@@ -7,6 +7,7 @@ import {
   Button,
   Container,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import {
   Menu as MenuIcon,
@@ -16,120 +17,50 @@ import {
   RadioButtonUnchecked,
 } from "@mui/icons-material";
 
-const TaskItem = ({ title, description, progress, completed }) => {
-  return (
-    <Card
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        p: 2,
-        mb: 2,
-        borderRadius: "20px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
-        position: "relative",
-      }}
-    >
-      <Box sx={{ position: "relative", display: "inline-flex", mr: 2 }}>
-        {progress !== undefined ? (
-          <>
-            <CircularProgress
-              variant="determinate"
-              value={progress}
-              size={55}
-              thickness={5}
-              sx={{ color: "#ffb133" }}
-            />
-            <Box
-              sx={{
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-                position: "absolute",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Typography
-                variant="caption"
-                component="div"
-                color="text.primary"
-                sx={{ fontWeight: "bold" }}
-              >
-                {`${progress}%`}
-              </Typography>
-            </Box>
-          </>
-        ) : (
-          <Box
-            sx={{
-              color: completed ? "#ffb133" : "#e0e0e0",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            {completed ? (
-              <CheckCircle fontSize="large" />
-            ) : (
-              <RadioButtonUnchecked fontSize="large" />
-            )}
-          </Box>
-        )}
-      </Box>
+const TaskManager = () => {
+  // 1. ESTADO: Lista inicial de tareas
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      title: "Add Your Task List",
+      desc: "Lorem ipsum dolor sit amet...",
+      progress: 75,
+    },
+    { id: 2, title: "Your Completed Task Name", completed: true },
+  ]);
 
-      <Box sx={{ flexGrow: 1 }}>
-        <Typography
-          variant="subtitle1"
-          sx={{ fontWeight: "bold", color: completed ? "#999" : "#333" }}
-        >
-          {title}
-        </Typography>
-        {description && (
-          <Typography
-            variant="caption"
-            sx={{ color: "#aaa", display: "block", lineHeight: 1.2 }}
-          >
-            {description}
-          </Typography>
-        )}
-      </Box>
+  // 2. FUNCIÓN: Añadir tarea (usamos un prompt simple para el ejemplo)
+  const addTask = () => {
+    const title = prompt("Nombre de la nueva tarea:");
+    if (title) {
+      const newTask = {
+        id: Date.now(), // ID único basado en el tiempo
+        title: title,
+        progress: 0, // Nueva tarea empieza en 0%
+      };
+      setTasks([newTask, ...tasks]); // Añadimos al inicio
+    }
+  };
 
-      {/* Botones de Acción */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-        <IconButton size="small" sx={{ color: "#ccc" }}>
-          <DeleteIcon fontSize="small" />
-        </IconButton>
-        {progress !== undefined && (
-          <IconButton
-            size="small"
-            sx={{
-              bgcolor: "#ffb133",
-              color: "white",
-              "&:hover": { bgcolor: "#e69f2d" },
-            }}
-          >
-            <KeyboardArrowDown fontSize="small" />
-          </IconButton>
-        )}
-      </Box>
-    </Card>
-  );
-};
+  // 3. FUNCIÓN: Eliminar tarea
+  const deleteTask = (id) => {
+    setTasks(tasks.filter((task) => task.id !== id));
+  };
 
-export default function TaskManager() {
   return (
     <Container
       maxWidth="xs"
       sx={{
         bgcolor: "#f5f5f5",
-        minHeight: "100vh",
         p: 0,
         borderRadius: "40px",
         overflow: "hidden",
+        minHeight: "80vh",
+        boxShadow: 10,
       }}
     >
-      <Box sx={{ bgcolor: "#ffb133", p: 4, pt: 6, pb: 8, color: "white" }}>
+      {/* Header */}
+      <Box sx={{ bgcolor: "#ffb133", p: 4, pb: 8, color: "white" }}>
         <Box
           sx={{
             display: "flex",
@@ -138,18 +69,18 @@ export default function TaskManager() {
           }}
         >
           <MenuIcon />
-          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             Task List
           </Typography>
           <Button
+            onClick={addTask} // <-- Click para añadir
             variant="contained"
             sx={{
               bgcolor: "white",
               color: "#ffb133",
               borderRadius: "20px",
-              textTransform: "none",
               fontWeight: "bold",
-              "&:hover": { bgcolor: "#fcfcfc" },
+              "&:hover": { bgcolor: "#fff" },
             }}
           >
             + New
@@ -157,28 +88,102 @@ export default function TaskManager() {
         </Box>
       </Box>
 
-      <Box sx={{ px: 2, mt: -4 }}>
-        <TaskItem
-          title="Add Your Task List"
-          description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy."
-          progress={75}
-        />
-        <TaskItem
-          title="Add Your Task List"
-          description="Lorem ipsum dolor sit amet, consectetuer adipiscing elit."
-          progress={50}
-        />
+      {/* Lista de Tareas Dinámica */}
+      <Box sx={{ px: 2, mt: -5 }}>
+        {tasks.map((task) => (
+          <Card
+            key={task.id}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              p: 2,
+              mb: 2,
+              borderRadius: "20px",
+            }}
+          >
+            {/* Indicador de progreso o Check */}
+            <Box sx={{ position: "relative", display: "inline-flex", mr: 2 }}>
+              {task.progress !== undefined ? (
+                <>
+                  <CircularProgress
+                    variant="determinate"
+                    value={task.progress}
+                    size={45}
+                    sx={{ color: "#ffb133" }}
+                  />
+                  <Box
+                    sx={{
+                      top: 0,
+                      left: 0,
+                      bottom: 0,
+                      right: 0,
+                      position: "absolute",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Typography
+                      variant="caption"
+                      sx={{ fontSize: "0.6rem", fontWeight: "bold" }}
+                    >
+                      {task.progress}%
+                    </Typography>
+                  </Box>
+                </>
+              ) : (
+                <Box sx={{ color: task.completed ? "#ffb133" : "#e0e0e0" }}>
+                  {task.completed ? (
+                    <CheckCircle fontSize="large" />
+                  ) : (
+                    <RadioButtonUnchecked fontSize="large" />
+                  )}
+                </Box>
+              )}
+            </Box>
 
-        <TaskItem title="Your Completed Task Name" completed={true} />
-        <TaskItem title="Your Completed Task Name" completed={true} />
-        <TaskItem title="Add Your Task Name" completed={false} />
+            {/* Texto de la tarea */}
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  fontWeight: "bold",
+                  color: task.completed ? "#999" : "#333",
+                }}
+              >
+                {task.title}
+              </Typography>
+              {task.desc && (
+                <Typography
+                  variant="caption"
+                  sx={{ color: "#aaa", display: "block" }}
+                >
+                  {task.desc}
+                </Typography>
+              )}
+            </Box>
 
-        <TaskItem
-          title="Add Your Task List"
-          description="Sed diam nonummy nibh euismod tincidunt ut laoreet."
-          progress={60}
-        />
+            {/* Botón Eliminar */}
+            <Box>
+              <IconButton
+                onClick={() => deleteTask(task.id)} // <-- Click para eliminar
+                size="small"
+                sx={{ color: "#d32f2f" }}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          </Card>
+        ))}
+
+        {tasks.length === 0 && (
+          <Typography sx={{ textAlign: "center", mt: 10, color: "#aaa" }}>
+            No hay tareas pendientes.
+          </Typography>
+        )}
       </Box>
     </Container>
   );
-}
+};
+
+export default TaskManager;

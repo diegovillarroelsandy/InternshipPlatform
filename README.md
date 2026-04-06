@@ -85,5 +85,19 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 ### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# InternshipPlatform
+## Tipo de arquitectura
+
+Este proyecto cuenta con un tipo de arquitectura basada en componentes de forma atomizada, creando cada componente de forma separada e integrandolo a las paginas que correspondan.
+
+## Modulos y componentes identificados
+
+- Components .- Con todos los componentes individuales del sistema
+- Config .- Con la configuracion de la base de datos
+- Context .- Para el contexto del usuario que ingrese a la aplicacion
+- Pages .- Con las paginas de la aplicacion
+- Server .- Con todo el backend desde los controllers hasta la configuracion de las rutas
+- Utils .- Con todos los auxiliares o extras necearios para valicaciones u/o verificaciones de seguridad.
+
+## Mejoras arquitectonicas propuestas
+
+Se podria considerar una capa de validacion de datos antes de ingresarlos a la DB para mejorar y proteger la integridad de los mismos. Adicional a eso se podria mejorar el manejo del contexto del usuario para que soporte a varios conectados de forma simultanea.
