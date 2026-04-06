@@ -29,7 +29,6 @@ const TaskItem = ({ title, description, progress, completed }) => {
         position: "relative",
       }}
     >
-      {/* Lado Izquierdo: Progreso o Checkbox */}
       <Box sx={{ position: "relative", display: "inline-flex", mr: 2 }}>
         {progress !== undefined ? (
           <>
@@ -79,7 +78,6 @@ const TaskItem = ({ title, description, progress, completed }) => {
         )}
       </Box>
 
-      {/* Contenido Central */}
       <Box sx={{ flexGrow: 1 }}>
         <Typography
           variant="subtitle1"
@@ -131,7 +129,6 @@ export default function TaskManager() {
         overflow: "hidden",
       }}
     >
-      {/* Header Naranja */}
       <Box sx={{ bgcolor: "#ffb133", p: 4, pt: 6, pb: 8, color: "white" }}>
         <Box
           sx={{
@@ -160,7 +157,6 @@ export default function TaskManager() {
         </Box>
       </Box>
 
-      {/* Lista de Tareas con margen negativo para subir las tarjetas */}
       <Box sx={{ px: 2, mt: -4 }}>
         <TaskItem
           title="Add Your Task List"
